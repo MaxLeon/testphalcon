@@ -27,46 +27,81 @@ use Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter;
  * Creando objetos...
  */
 
-/**
- * Creando el loader
- */
+try {
 
-$loader = new Loader();
-$loader->registerDirs(array('../app/controllers','../app/models'))->register();
+		/**
+		 * Creando el loader
+		 */
 
-/**
- * Creando el inyector de dependencia
- */
+		$loader = new Loader();
+		$loader->registerDirs(array('../app/controllers',
+									'../app/models'))->register();
 
-$di = new FactoryDefault();
+		/**
+		 * Creando el inyector de dependencia
+		 */
 
-/**
- * inyectando los servicios dentro del dependency inyector
- */
+		$di = new FactoryDefault();
 
-/**
- * Setteando la DB
- * Se crea un apadtador para manejar la base de datos y las credenciales son pasadas como un arreglo
- */
-$di['db'] = function(){return new DbAdapter(array("host" => "192.168.17.129",
- 												  "username" => "maximo",
- 												  "password" => "1234",
- 												  "dbname" => "phalcontest"))};
+		/**
+		 * inyectando los servicios dentro del dependency inyector
+		 */
 
-/**
- * Setteando los Views
- * Se crea el objeto que contendra las vistas
- * Se mapea la calpeta de las vistas
- * Se retorna el contenedor
- */
-$di['view'] = function(){
-	$view = new View(); 
-	$view->setViewsDir('../app/views/');
-	return $view;};
+		/**
+		 * Setteando la DB
+		 * Se crea un apadtador para manejar la base de datos y las credenciales son pasadas como un arreglo
+		 */
+		$di['db'] = function(){return new DbAdapter(array("host" => "192.168.17.129",
+		 												  "username" => "maximo",
+		 												  "password" => "1234",
+		 												  "dbname" => "phalcontest"));
+	};
 
-$di['url'] = function(){
-	$url = new Url();
-	$url->setBaseUri('/');
-	return $url;
-};
+		/**
+		 * Setteando los Views
+		 * Se crea el objeto que contendra las vistas
+		 * Se mapea la calpeta de las vistas
+		 * Se retorna el contenedor
+		 */
+		$di['view'] = function(){
+			$view = new View(); 
+			$view->setViewsDir('../app/views/');
+			return $view;
+		};
+
+		/**
+		 * Setteando la ubicacion de ruta
+		 * Se crea el tag de la ruta en la cual se enfocara para buscar las rutas sucesivas
+		 */
+		$di['url'] = function(){
+			$url = new Url();
+			$url->setBaseUri('/app');
+			return $url;
+		};
+
+		/**
+		 * Setteando el objeto tag el cual es utilizado para crear los elementos que se ubican en la vista como el form y de mas
+		 */
+
+		$di['tag'] = function(){
+
+			return new Tag();
+		};
+
+		/**
+		 * Se crea el objeto que contendra todos los demas elementos que compondran la aplicacion
+		 */
+		$app = new Application($di);
+
+		/**
+		 * Se dispara el objeto a la vista
+		 */
+		echo $app->handle()->getcontent();
+	
+} catch (Exception $e) {
+
+	echo $e->getMessage();
+	
+}
+
 ?>
