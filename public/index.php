@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 /**
  *  haciendo el esqueleto manual de phalcon.
@@ -42,7 +42,7 @@ try {
 		 */
 
 		$di = new FactoryDefault();
-
+		//Agrege un comentario
 		/**
 		 * inyectando los servicios dentro del dependency inyector
 		 */
@@ -64,7 +64,7 @@ try {
 		 * Se retorna el contenedor
 		 */
 		$di['view'] = function(){
-			$view = new View(); 
+			$view = new View();
 			$view->setViewsDir('../app/views/');
 			return $view;
 		};
@@ -97,11 +97,11 @@ try {
 		 * Se dispara el objeto a la vista
 		 */
 		echo $app->handle()->getcontent();
-	
+
 } catch (Exception $e) {
 
 	echo $e->getMessage();
-	
+
 }
 
 ?>
